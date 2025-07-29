@@ -227,5 +227,10 @@ describe('Age Calculator Utility', () => {
       const age = calculateAge('2024-06-30', '2024-07-30');
       expect(age).toEqual({ years: 0, months: 1, weeks: 0, days: 0 }); // cuz there's exactly 1 month between 30th of June and 30th of July (yes, it's weird I know, in previous test age should be 1 day less then here, but it's not, because we are using the "last day of the month" logic there)
     });
+
+    test('should handle end of month to beginning of month', () => {
+      const age = calculateAge('2024-12-31', '2025-03-01');
+      expect(age).toEqual({ years: 0, months: 2, weeks: 0, days: 1 }); // cuz there's one day from 2024-12-31 to 2025-01-01, then 2 months from 2025-01-01 to 2025-03-01
+    });
   });
 });

@@ -109,6 +109,11 @@ export function calculateAge(startDate: string, endDate: string): AgeResult {
       }
     }
 
+    // Guard: Never allow negative chosenDays – fall back to the positive one.
+    if (chosenDays < 0) {
+      chosenDays = optionADays >= 0 ? optionADays : optionBDays;
+    }
+
     days = chosenDays;
   }
 
