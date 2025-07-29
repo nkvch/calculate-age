@@ -1,6 +1,6 @@
 {
-  "name": "@nkvch/age-calculator",
-  "version": "1.0.0",
+  "name": "age-calculator-utils",
+  "version": "1.0.1",
   "description": "Simple age calculation utility for JavaScript/TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,6 +8,14 @@
     "build": "tsc",
     "test": "jest",
     "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nkvch/calculate-age.git"
+  },
+  "homepage": "https://github.com/nkvch/calculate-age#readme",
+  "bugs": {
+    "url": "https://github.com/nkvch/calculate-age/issues"
   },
   "keywords": [
     "age",
