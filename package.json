@@ -1,6 +1,6 @@
 {
   "name": "age-calculator-utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple age calculation utility for JavaScript/TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
