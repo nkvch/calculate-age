@@ -80,6 +80,31 @@ describe('Age Calculator Utility', () => {
       expect(result).toEqual({ years: 0, months: 1, weeks: 0, days: 0 }); // cuz there's exactly one month between 29th of January and 29th of February
     });
 
+    test('should handle February', () => {
+      const result = calculateAge('2023-02-28', '2023-03-28');
+      expect(result).toEqual({ years: 0, months: 1, weeks: 0, days: 0 });
+    });
+
+    test('should handle February 28 to March 29', () => {
+      const result = calculateAge('2023-02-28', '2023-03-29');
+      expect(result).toEqual({ years: 0, months: 1, weeks: 0, days: 1 });
+    });
+
+    test('should handle February 28 to March 30', () => {
+      const result = calculateAge('2023-02-28', '2023-03-30');
+      expect(result).toEqual({ years: 0, months: 1, weeks: 0, days: 2 });
+    });
+
+    test('should handle February 28 to March 31', () => {
+      const result = calculateAge('2023-02-28', '2023-03-31');
+      expect(result).toEqual({ years: 0, months: 1, weeks: 0, days: 3 });
+    });
+
+    test('should handle February 28 to April 1', () => {
+      const result = calculateAge('2023-02-28', '2023-04-01');
+      expect(result).toEqual({ years: 0, months: 1, weeks: 0, days: 1 });
+    });
+
     test('should handle non-leap year February', () => {
       const result = calculateAge('2023-01-29', '2023-02-28');
       expect(result).toEqual({ years: 0, months: 0, weeks: 4, days: 2 });
@@ -87,7 +112,7 @@ describe('Age Calculator Utility', () => {
 
     test('should handle leap year to non-leap year February transition', () => {
         const result = calculateAge('2024-02-29', '2025-02-28');
-        expect(result).toEqual({ years: 1, months: 0, weeks: 0, days: 0 }); // cuz there's exactly one year between last day of February 2024 and last day of February 2025
+        expect(result).toEqual({ years: 0, months: 11, weeks: 4, days: 0 });
     });
 
     test('should calculate age from January to February in non-leap year', () => {
@@ -102,17 +127,17 @@ describe('Age Calculator Utility', () => {
 
     test('should handle month boundaries correctly', () => {
       const result = calculateAge('2024-01-31', '2024-02-29');
-      expect(result).toEqual({ years: 0, months: 1, weeks: 0, days: 0 }); // cuz there's exactly one month between last day of January and last day of February (in 2024 February has 29 days)
+      expect(result).toEqual({ years: 0, months: 0, weeks: 4, days: 1 });
     });
 
     test('should handle month boundaries correctly in non-leap year', () => {
       const result = calculateAge('2025-01-31', '2025-02-28');
-      expect(result).toEqual({ years: 0, months: 1, weeks: 0, days: 0 }); // cuz there's exactly one month between last day of January and last day of February (in 2025 February has 28 days)
+      expect(result).toEqual({ years: 0, months: 0, weeks: 4, days: 0 });
     });
 
     test('should handle month boundaries correctly in leap year', () => {
       const result = calculateAge('2024-01-31', '2024-02-28');
-      expect(result).toEqual({ years: 0, months: 0, weeks: 4, days: 0 }); // 28th of February is not the last day of the month so here the "last day of the month" logic is not applied
+      expect(result).toEqual({ years: 0, months: 0, weeks: 4, days: 0 });
     });
 
     test('should handle year boundaries', () => {
@@ -150,7 +175,7 @@ describe('Age Calculator Utility', () => {
 
     test('real-world example 2', () => {
       const age = calculateAge('2011-01-06', '2015-05-04');
-      expect(age).toEqual({ years: 4, months: 3, weeks: 4, days: 0 });
+      expect(age).toEqual({ years: 4, months: 3, weeks: 4, days: 1 });
     });
 
     test('real-world example 3', () => {
@@ -178,19 +203,24 @@ describe('Age Calculator Utility', () => {
         expect(age).toEqual({ years: 2, months: 9, weeks: 4, days: 1 });
     });
 
+    test('real-world example 7 part 2', () => {
+      const age = calculateAge('2022-03-11', '2025-01-13');
+      expect(age).toEqual({ years: 2, months: 10, weeks: 0, days: 2 });
+  });
+
     test('real-world example 8', () => {
         const age = calculateAge('2022-12-26', '2024-05-30');
-        expect(age).toEqual({ years: 1, months: 5, weeks: 0, days: 4 });
+        expect(age).toEqual({ years: 1, months: 5, weeks: 0, days: 4 }); // cuz we add 4 days to 2022-12-26 and get 2022-12-30, then we add 5 months to it and get 2023-05-30 and then we add 1 year to it and get 2024-05-30
     });
 
     test('real-world example 9', () => {
         const age = calculateAge('2023-06-16', '2024-05-01');
-        expect(age).toEqual({ years: 0, months: 10, weeks: 2, days: 1 });
+        expect(age).toEqual({ years: 0, months: 10, weeks: 2, days: 1 }); // cuz we add 2 weeks to 2023-06-16 and get 2023-06-30 then we add 1 day to it and get 2023-07-01, then we add 10 months to it and get 2024-05-01
     });
 
     test('real-world example 10', () => {
         const age = calculateAge('2023-07-30', '2024-03-20');
-        expect(age).toEqual({ years: 0, months: 7, weeks: 2, days: 5 }); // cuz if we add 7 months to 2023-07-30 we are suppused to kinda get 2024-02-30, and technically 2024-02-30 = 2024-02-29 + 1 day = 2024-03-01, then we have 19 days left till 20th of March, which is 2 weeks and 5 days
+        expect(age).toEqual({ years: 0, months: 7, weeks: 3, days: 0 }); // cuz we add 3 weeks to 2023-07-30 and get 2023-08-20, then we add 7 months to it and get 2024-03-20
     });
 
     test('should handle tricky case 1', () => {
@@ -204,28 +234,28 @@ describe('Age Calculator Utility', () => {
     });
 
     test('should handle end of month to end of month calculation', () => {
-      const age = calculateAge('2025-12-31', '2025-02-28');
-      expect(age).toEqual({ years: 0, months: 2, weeks: 0, days: 0 }); // cuz there's exactly 2 month between last day of December and last day of February (in 2025 February has 28 days)
+      const age = calculateAge('2024-12-31', '2025-02-28');
+      expect(age).toEqual({ years: 0, months: 1, weeks: 4, days: 0 }); // cuz there's exactly 4 weeks between 31st of December and 28th of January + 1 month from 28th of January to 28th of February
     });
 
     test('should handle end of month to end of month calculation in leap year', () => {
-      const age = calculateAge('2024-12-31', '2024-02-29');
-      expect(age).toEqual({ years: 0, months: 2, weeks: 0, days: 0 }); // cuz there's exactly 2 month between last day of December and last day of February (in 2024 February has 29 days)
+      const age = calculateAge('2023-12-31', '2024-02-29');
+      expect(age).toEqual({ years: 0, months: 1, weeks: 4, days: 1 });
     });
 
     test('should handle end of month to end of month', () => {
       const age = calculateAge('2025-06-30', '2025-08-31');
-      expect(age).toEqual({ years: 0, months: 2, weeks: 0, days: 0 }); // cuz there's exactly 2 month between last day of June and last day of August (in 2025 August has 31 days)
+      expect(age).toEqual({ years: 0, months: 2, weeks: 0, days: 1 }); // cuz there's exactly 2 month between 30th of June and 30th of August + 1 day from 30th of August to 31st of August
     });
 
     test('should handle end of month to end of month', () => {
       const age = calculateAge('2024-06-30', '2024-07-31');
-      expect(age).toEqual({ years: 0, months: 1, weeks: 0, days: 0 }); // cuz there's exactly 1 month between last day of June and last day of July (in 2024 July has 31 days)
+      expect(age).toEqual({ years: 0, months: 1, weeks: 0, days: 1 }); // cuz there's exactly 1 month between 30th of June and 30th of July + 1 day from 30th of July to 31st of July
     });
 
     test('should handle end of month to end of month', () => {
       const age = calculateAge('2024-06-30', '2024-07-30');
-      expect(age).toEqual({ years: 0, months: 1, weeks: 0, days: 0 }); // cuz there's exactly 1 month between 30th of June and 30th of July (yes, it's weird I know, in previous test age should be 1 day less then here, but it's not, because we are using the "last day of the month" logic there)
+      expect(age).toEqual({ years: 0, months: 1, weeks: 0, days: 0 }); // cuz there's exactly 1 month between 30th of June and 30th of July
     });
 
     test('should handle end of month to beginning of month', () => {
@@ -234,3 +264,14 @@ describe('Age Calculator Utility', () => {
     });
   });
 });
+
+
+// General logic is the following:
+// If day number is the same, we just count the months between the two dates
+// If day number of first date is greater than the day number of the second date, we:
+//    a) add the difference to the first date until we get the first day of the next month
+//    b) add months between the first day of the next month and the first day of the month from the second date
+//    c) add weeks and days between the first day of the month from the second date and the second date
+// If day number of first date is less than the day number of the second date, we:
+//    a) add weeks and days to the first date until we get the same day number as the second date
+//    b) add months and years between the month from the first date and the month from the second date
